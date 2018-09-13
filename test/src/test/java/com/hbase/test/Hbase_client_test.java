@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 
 
 /**
- * Test for Hbase_client
+ * Test for Hbase_client  
  * 
  */
 public class Hbase_client_test {
