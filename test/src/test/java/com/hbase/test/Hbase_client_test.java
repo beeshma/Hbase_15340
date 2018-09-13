@@ -29,12 +29,15 @@ import org.apache.hadoop.hbase.master.*;
 import org.apache.log4j.Logger;
 
 
-
+/**
+ * Test for Hbase_client
+ * 
+ */
 public class Hbase_client_test {
   
   final static Logger logger = Logger.getLogger(Hbase_client_test.class);
-  private  Configuration cf;
-  private Connection conc;
+  private  static  Configuration cf;
+  private static  Connection conc;
   
   
   
@@ -46,14 +49,14 @@ public class Hbase_client_test {
     conf.setInt("WAIT_ON_REGIONSERVERS_MINTOSTART",3);
     conf.setInt("WAIT_ON_REGIONSERVERS_MAXTOSTART",3);
     
-    this.cf=conf;
-      this.conc=ConnectionFactory.createConnection(cf);
+    Hbase_client_test.cf=conf;
+    this.conc=ConnectionFactory.createConnection(cf);
 
   }
   
 
 
-public void deleteTableIfAnyandcreate(TableName tableName,byte[] familyname) throws IOException {
+public static void deleteTableIfAnyandcreate(TableName tableName,byte[] familyname) throws IOException {
   Hbase_client HC= new Hbase_client();
  
  
@@ -67,9 +70,8 @@ public void deleteTableIfAnyandcreate(TableName tableName,byte[] familyname) thr
   
 }
 
-public void deleteTable(TableName tableName) throws IOException {
+public static void deleteTable(TableName tableName) throws IOException {
   try {
-    
     
     
     
@@ -106,24 +108,7 @@ public boolean  isTablepresent(TableName t) throws IOException
     }
     
     return ret;
-    
-    
- /*String s=   con.getTable(t).getName().toString();
-   // con.getConfiguration().
         
-  // if (s.equals(t.getNameAsString()))
-     if (s.equals("mytableaa1x123x1"))
-   
-   {
-     System.out.println(s);
-     System.out.println("Table is present");
-       return true;
-   }
-   else
-   {
-     System.out.println("Table is not present");
-     return false;
-   }*/
 }
   
 

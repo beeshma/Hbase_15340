@@ -16,7 +16,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 public class Hbase_client 
 {
   
-      public void createTable (TableName tableName, byte[] family,Configuration conf) throws IOException
+      public   void createTable (TableName tableName, byte[] family,Configuration conf) throws IOException
        {
          
        try (Connection con = ConnectionFactory.createConnection(conf);
