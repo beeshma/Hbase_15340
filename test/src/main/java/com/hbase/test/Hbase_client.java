@@ -33,13 +33,40 @@ public class Hbase_client
         
          admin.createTable(desc);
          
-         System.out.println("table got created");
-        
+         System.out.println("table got created");   
          
-       }
-    
+         }       
+      }
+      
+      /* Create MultiRegion Table
+       * @param1  tableName
+       * @param2  families
+       * @param3  conf
+       */
+      
+      
+      
+      public  void createMultiRegionTable(TableName tableName,byte[][] families,Configuration conf) throws IOException
+      {
+        
        
-       }
-       
-
-}
+       try (Connection con = ConnectionFactory.createConnection(conf);
+           Admin admin = con.getAdmin())
+       {
+         TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(tableName);
+         
+         for(byte[] family : families )
+         {
+           builder.setColumnFamily(
+             ColumnFamilyDescriptorBuilder
+                 .newBuilder(family)
+                 .build());
+         }                       
+         TableDescriptor desc=  builder.build();
+         admin.createTable(desc);           
+             
+         }  
+        
+        }
+     
+      }

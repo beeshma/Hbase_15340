@@ -7,6 +7,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
@@ -15,9 +16,11 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.TableNotEnabledException;
 import org.apache.hadoop.hbase.TableNotFoundException;
 import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.RegionInfo;
 import org.apache.hadoop.hbase.client.TableDescriptor;
 import org.junit.After;
 import org.junit.Before;
@@ -26,8 +29,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Assert;
 import org.apache.hadoop.hbase.master.*;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
-
+/*import org.apache.hadoop.hbase.regionserver.*;*/
+/*import org.apache.hadoop.hbase.regionserver.HRegionServer;*/
 
 /**
  * Test for Hbase_client  
@@ -69,6 +74,8 @@ public static void deleteTableIfAnyandcreate(TableName tableName,byte[] familyna
   HC.createTable(tableName,familyname,cf);
   
 }
+
+
 
 public static void deleteTable(TableName tableName) throws IOException {
   try {
@@ -116,7 +123,7 @@ public boolean  isTablepresent(TableName t) throws IOException
   @Before
 public void  Tablecreation() throws IOException
 {
-
+   
     TableName testname=TableName.valueOf("mytableaa1x123x1");
     byte[] familyname= String.valueOf("mycol").getBytes();
     
@@ -128,16 +135,75 @@ public void  Tablecreation() throws IOException
      deleteTableIfAnyandcreate(testname,familyname);
     } 
     
-  
+      
 }
-
+/*
+  @Before
+  public void MultiRegionTableCreate() throws IOException
+  {
+    Hbase_client HCM= new Hbase_client();
+    TableName tablename=TableName.valueOf("MultiRegion");
+    
+    if (isTablepresent(tablename))
+    {
+      deleteTable(tablename);
+    }
+    
+    byte[] startKey = Bytes.toBytes("aaaaa");
+    byte[] endKey = Bytes.toBytes("zzzzz");
+    byte[][] splitKeys = Bytes.split(startKey, endKey, 1);
+    HCM.createMultiRegionTable(tablename, splitKeys, cf);
+     
+    
+  }
+  */
+  
+ /*@Test
+ 
+ public void testNumberofRegoins() throws IOException
+ {
    
+   Hbase_client HCM= new Hbase_client();
+   TableName tablename=TableName.valueOf("MultiRegion");
+      
+   
+   
+   
+ }*/
+  
+ 
   @Test
-  public void testPrintHelloWorld() {
+  public void testPrintHelloWorld() throws IOException {
 
-    Assert.assertEquals("Hello World", "Hello World");
+   /* HBaseAdmin HAD=new HBaseAdmin(conc);*/
+    
+    Admin ad=conc.getAdmin();
+     
+    List<RegionInfo> Li= new ArrayList <RegionInfo>();
+    
+    Hbase_client HC= new Hbase_client();
+    TableName tablename=TableName.valueOf("MultiRegion");
+    if (isTablepresent(tablename))
+    {
+      deleteTable(tablename);
+    }
+    byte[] startKey = Bytes.toBytes("aaaaa");
+    byte[] endKey = Bytes.toBytes("zzzzz");
+    byte[][] splitKeys = Bytes.split(startKey, endKey, 1);
+    HC.createMultiRegionTable(tablename, splitKeys, cf);
+    
+      Li=ad.getRegions(tablename);
+      
+      for(RegionInfo ri:Li)
+      {
+        System.out.println(ri.getStartKey());
+        
+        System.out.println( ri.getRegionName());
+      }
+     
+    Assert.assertEquals("3", Li.size());
 
   }
-  
+
 
 }
