@@ -187,23 +187,27 @@ public void  Tablecreation() throws IOException
     {
       deleteTable(tablename);
     }
+    byte[] family=Bytes.toBytes("FamilyName");
+    
     byte[] startKey = Bytes.toBytes("aaaaa");
     byte[] endKey = Bytes.toBytes("zzzzz");
     byte[][] splitKeys = Bytes.split(startKey, endKey, 1);
-    HC.createMultiRegionTable(tablename, splitKeys, cf);
+    
+    
+    HC.createMultiRegionTable(tablename,new byte[][] { family }, splitKeys, cf);
     
       Li=ad.getRegions(tablename);
       
       for(RegionInfo ri:Li)
       {
-        System.out.println(ri.getStartKey());
+        System.out.println(ri.getStartKey().toString());
         
-        System.out.println( ri.getRegionName());
+        System.out.println( ri.getRegionName().toString());
       }
      
-    Assert.assertEquals("3", Li.size());
+    Assert.assertEquals(4, Li.size());
 
-  }
+  } 
 
 
 }

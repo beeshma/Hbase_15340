@@ -32,6 +32,7 @@ public class Hbase_client
          
         
          admin.createTable(desc);
+       
          
          System.out.println("table got created");   
          
@@ -46,7 +47,7 @@ public class Hbase_client
       
       
       
-      public  void createMultiRegionTable(TableName tableName,byte[][] families,Configuration conf) throws IOException
+      public  void createMultiRegionTable(TableName tableName,byte[][] families,byte[][] splitKeys,Configuration conf) throws IOException
       {
         
        
@@ -63,7 +64,7 @@ public class Hbase_client
                  .build());
          }                       
          TableDescriptor desc=  builder.build();
-         admin.createTable(desc);           
+         admin.createTable(desc,splitKeys);           
              
          }  
         
